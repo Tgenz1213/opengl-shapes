@@ -114,8 +114,6 @@ int main(int argc, char* argv[])
 		else
 			mController.setViewModePerspective();
 
-		//glUseProgram(0); // This line singlehandedly caused me to refactor my code three times and is the reason I'm behind in class now. Leaving it here for shame.
-
 		// Swap buffers
 		glfwSwapBuffers(mView.vWindow);
 
