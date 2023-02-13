@@ -36,6 +36,7 @@
     <ClInclude Include="includes\cylinderShader\src\Cylinder.h" />
     <ClInclude Include="includes\stb_image.h" />
     <ClInclude Include="PyramidSqBase.h" />
+    <ClInclude Include="Shaders.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeFactory.h" />
     <ClInclude Include="Source.h" />

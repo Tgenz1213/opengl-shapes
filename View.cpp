@@ -2,7 +2,7 @@
 #include "Controller.h"
 
 // Create shader
-bool View::createShaderProgram()
+bool View::createShaderProgram(const GLchar* const vertexShaderSource, const GLchar* const fragmentShaderSource)
 {
 	// Compilation and linkage error reporting
 	int success = 0;
@@ -78,6 +78,6 @@ void View::resizeWindow(int width, int height)
 
 void View::resizeWindowWrapper(GLFWwindow* window, int width, int height)
 {
-	View* view = static_cast<View*>(glfwGetWindowUserPointer(window));
+	auto* view = static_cast<View*>(glfwGetWindowUserPointer(window));
 	view->resizeWindow(width, height);
 }

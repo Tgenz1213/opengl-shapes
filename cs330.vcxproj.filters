@@ -110,6 +110,9 @@
     <ClInclude Include="UCylinder.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
+    <ClInclude Include="Shaders.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\woodgrain.jpg">

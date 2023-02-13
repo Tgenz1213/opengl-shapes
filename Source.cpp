@@ -1,5 +1,4 @@
 #include "Source.h"
-#include "PyramidSqBase.h"
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +22,7 @@ int main(int argc, char* argv[])
 	UCylinder mCylinder = mFactory.createCylinder();
 
 	// Create the shader program
-	if (!mView.createShaderProgram())
+	if (!mView.createShaderProgram(ShaderTexOnly::vertexShaderSource, ShaderTexOnly::fragmentShaderSource))
 		return EXIT_FAILURE;
 
 	// Load wood texture

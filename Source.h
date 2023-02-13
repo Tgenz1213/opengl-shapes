@@ -4,6 +4,7 @@
 #include "Controller.h"
 #include "View.h"
 #include "ShapeFactory.h"
+#include "Shaders.h"
 
 // Image loader
 #define STB_IMAGE_IMPLEMENTATION
