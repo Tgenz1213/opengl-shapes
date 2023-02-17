@@ -9,7 +9,7 @@ bool View::createShaderProgram(const GLchar* const vertexShaderSource, const GLc
 	char infoLog[512];
 
 	// Create a Shader program object.
-	vProgramId = glCreateProgram();
+	currentProgramId = glCreateProgram();
 
 	// Create the vertex and fragment shader objects
 	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
@@ -43,31 +43,31 @@ bool View::createShaderProgram(const GLchar* const vertexShaderSource, const GLc
 	}
 
 	// Attached compiled shaders to the shader program
-	glAttachShader(vProgramId, vertexShaderId);
-	glAttachShader(vProgramId, fragmentShaderId);
+	glAttachShader(currentProgramId, vertexShaderId);
+	glAttachShader(currentProgramId, fragmentShaderId);
 
-	glLinkProgram(vProgramId);   // links the shader program
+	glLinkProgram(currentProgramId);   // links the shader program
 	// check for linking errors
-	glGetProgramiv(vProgramId, GL_LINK_STATUS, &success);
+	glGetProgramiv(currentProgramId, GL_LINK_STATUS, &success);
 	if (!success)
 	{
-		glGetProgramInfoLog(vProgramId, sizeof(infoLog), nullptr, infoLog);
+		glGetProgramInfoLog(currentProgramId, sizeof(infoLog), nullptr, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 
 		return false;
 	}
 
-	glUseProgram(vProgramId);    // Uses the shader program
+	glUseProgram(currentProgramId);    // Uses the shader program
 
 	return true;
 }
 
-void View::destroyShaderProgram()
+void View::destroyShaderProgram(GLuint programId) const
 {
-	glDeleteProgram(vProgramId);
+	glDeleteProgram(programId);
 }
 
-void View::resizeWindow(int width, int height)
+void View::resizeWindow(int width, int height) const
 {
 	glViewport(0, 0, width, height);
 	GLenum error = glGetError();
@@ -76,8 +76,71 @@ void View::resizeWindow(int width, int height)
 	}
 }
 
+// Camera speed 2.5f to 2.5f*3
+void View::setCameraSpeed(float speed)
+{
+	static const float cameraSpeed = 2.5f;
+
+	vCamera.MovementSpeed += cameraSpeed * speed;
+	if (vCamera.MovementSpeed < cameraSpeed)
+		vCamera.MovementSpeed = cameraSpeed;
+	if (vCamera.MovementSpeed > cameraSpeed * 3.0f)
+		vCamera.MovementSpeed = cameraSpeed * 3.0f;
+}
+
+// Draw shapes with user assigned textures
+void View::drawShape(const Shape& shape) const
+{
+	GLint activeTextureLocation = glGetUniformLocation(currentProgramId, "uTexture");
+
+	glActiveTexture(GL_TEXTURE0 + shape.texId);	// Woodgrain.jpg
+	glBindTexture(GL_TEXTURE_2D, shape.texId);
+
+	glUniform1i(activeTextureLocation, shape.texId);
+
+	glBindVertexArray(shape.vao);
+	shape.draw();
+	glBindVertexArray(0);
+}
+
+void View::setViewModePerspective() const
+{
+	// Transforms the camera: move the camera back (z axis)
+	glm::mat4 view = vCamera.GetViewMatrix();
+
+	glm::mat4 projection = glm::perspective(glm::radians(vCamera.Zoom), (GLfloat)WINDOW_WIDTH / (GLfloat)WINDOW_HEIGHT, 0.1f, 100.0f);
+
+	// Retrieves and passes transform matrices to the Shader program
+	GLint viewLoc = glGetUniformLocation(currentProgramId, "view");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+	GLint projLoc = glGetUniformLocation(currentProgramId, "projection");
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void View::setViewModeOrthographic() const
+{
+	// Transforms the camera: move the camera back (z axis)
+	glm::mat4 view = vCamera.GetViewMatrix();
+
+	glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
+
+	// Retrieves and passes transform matrices to the Shader program
+	GLint viewLoc = glGetUniformLocation(currentProgramId, "view");
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+	GLint projLoc = glGetUniformLocation(currentProgramId, "projection");
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void View::useProgram(GLuint programId)
+{
+	setProgramId(programId);
+	glUseProgram(currentProgramId);
+}
+
 void View::resizeWindowWrapper(GLFWwindow* window, int width, int height)
 {
-	auto* view = static_cast<View*>(glfwGetWindowUserPointer(window));
+	auto const* view = static_cast<View*>(glfwGetWindowUserPointer(window));
 	view->resizeWindow(width, height);
 }

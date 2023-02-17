@@ -17,8 +17,32 @@ public:
 
 	// Methods
 	bool createShaderProgram(const GLchar* const vertexShaderSource, const GLchar* const fragmentShaderSource);
-	void destroyShaderProgram();
-	void resizeWindow(int width, int height);
+	void destroyShaderProgram(GLuint programId) const;
+	void resizeWindow(int width, int height) const;
+	void switchViewType() { isPerspective = !isPerspective; }
+	void setCameraSpeed(float speed);
+	void drawShape(const Shape& shape) const;
+	void setViewModePerspective() const;
+	void setViewModeOrthographic() const;
+	void useProgram(GLuint programId);
+
+	// Setters
+	void setProgramId(GLuint programId) { this->currentProgramId = programId; }
+	void setCameraPosition(glm::vec3 position) { this->cameraPosition = position; }
+	void setLastX(float x) { this->vLastX = x; }
+	void setLastY(float y) { this->vLastY = y; }
+	void setFirstMouse(bool isFirst) { this->vFirstMouse = isFirst; }
+	void setWindow(GLFWwindow* window) { this->vWindow = window; }
+
+	// Getters
+	GLuint getProgramId() const { return currentProgramId; }
+	Camera& getCamera() { return vCamera; }
+	glm::vec3 getCameraPosition() const { return cameraPosition; }
+	float getLastX() const { return vLastX; }
+	float getLastY() const { return vLastY; }
+	bool getFirstMouse() const { return vFirstMouse; }
+	GLFWwindow* getWindow() const { return vWindow; }
+	bool isViewPerspective() const { return isPerspective; }
 
 	// Wrappers
 	static void resizeWindowWrapper(GLFWwindow* window, int width, int height);
@@ -28,14 +52,16 @@ public:
 	const int WINDOW_WIDTH = 800;
 	const int WINDOW_HEIGHT = 600;
 
+private:
 	Camera vCamera;
+	GLuint currentProgramId{};
+
 	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
 	float vLastX = (float)WINDOW_WIDTH / 2.0f;
 	float vLastY = (float)WINDOW_HEIGHT / 2.0f;
 	bool vFirstMouse = true;
 
-	GLuint vProgramId;
 	GLFWwindow* vWindow = nullptr;
 
-	bool isOrtho = false;	// For toggling between perspective and orthographic
+	bool isPerspective = true;	// For toggling between perspective and orthographic view modes
 };

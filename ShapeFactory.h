@@ -3,6 +3,7 @@
 #include "Cube.h"
 #include "PyramidSqBase.h"
 #include "UCylinder.h"
+#include "Plane.h"
 
 class ShapeFactory
 {
@@ -15,4 +16,5 @@ public:
 	Cube createCube() const { return Cube(); }
 	PyramidSqBase createPyramid() const { return PyramidSqBase(); }
 	UCylinder createCylinder() const { return UCylinder(); }
+	Plane createPlane() const { return Plane(); }
 };

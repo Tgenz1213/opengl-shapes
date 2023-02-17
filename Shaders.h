@@ -9,7 +9,6 @@
 
 ////////////////////////////////////////////////////////////////
 // Render shapes that only have color coordinates
-//
 namespace ShaderColorOnly
 {
 	/* Vertex Shader Source Code*/
@@ -45,9 +44,8 @@ namespace ShaderColorOnly
 }
 
 ////////////////////////////////////////////////////////////////
-// Render shapes that have texture coordinates
-// Must modify fragment shader to use different textures on different shapes
-//
+// Render shapes that have texture coordinates Must modify fragment shader to use different textures
+// on different shapes
 namespace ShaderTexOnly
 {
 	/* Vertex Shader Source Code */
@@ -92,11 +90,10 @@ namespace ShaderTexOnly
 
 ////////////////////////////////////////////////////////////////
 // Render shapes that have normals and texture coordinates
-//
 namespace ShaderNormalsTex
 {
-	/* Vertex Shader Source Code*/
-	const GLchar* vertexShaderSource = GLSL(440,
+	/* Vertex Shader Source Code */
+	const GLchar* const vertexShaderSource = GLSL(440,
 
 		layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
 	layout(location = 1) in vec3 normal; // VAP position 1 for normals
@@ -123,7 +120,7 @@ namespace ShaderNormalsTex
 	);
 
 	/* Fragment Shader Source Code*/
-	const GLchar* fragmentShaderSource = GLSL(440,
+	const GLchar* const fragmentShaderSource = GLSL(440,
 
 		in vec3 vertexNormal; // For incoming normals
 	in vec3 vertexFragmentPos; // For incoming fragment position
@@ -132,41 +129,53 @@ namespace ShaderNormalsTex
 	out vec4 fragmentColor; // For outgoing cube color to the GPU
 
 	// Uniform / Global variables for object color, light color, light position, and camera/view position
-	uniform vec3 objectColor;
-	uniform vec3 lightColor;
-	uniform vec3 lightPos;
+	uniform vec3 keyLightColor;
+	uniform vec3 keyLightPos;
+	uniform vec3 fillLightColor;
+	uniform vec3 fillLightPos;
 	uniform vec3 viewPosition;
 	uniform sampler2D uTexture; // Useful when working with multiple textures
-	uniform vec2 uvScale;
 
 	void main()
 	{
 		/*Phong lighting model calculations to generate ambient, diffuse, and specular components*/
 
-		//Calculate Ambient lighting*/
+		/* Calculate Ambient lighting */
 		float ambientStrength = 0.1f; // Set ambient or global lighting strength
-		vec3 ambient = ambientStrength * lightColor; // Generate ambient light color
+		vec3 ambient = ambientStrength * (keyLightColor + fillLightColor); // Generate ambient light color
 
-		//Calculate Diffuse lighting*/
+		/* Calculate Diffuse lighting for key light */
 		vec3 norm = normalize(vertexNormal); // Normalize vectors to 1 unit
-		vec3 lightDirection = normalize(lightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
-		float impact = max(dot(norm, lightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
-		vec3 diffuse = impact * lightColor; // Generate diffuse light color
+		vec3 keyLightDirection = normalize(keyLightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+		float impact = max(dot(norm, keyLightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+		vec3 diffuseKey = impact * keyLightColor; // Generate diffuse light color
 
-		//Calculate Specular lighting*/
-		float specularIntensity = 0.8f; // Set specular light strength
+		/* Calculate Diffuse lighting for fill light */
+		vec3 fillLightDirection = normalize(fillLightPos - vertexFragmentPos); // Calculate distance (light direction) between light source and fragments/pixels on cube
+		impact = max(dot(norm, fillLightDirection), 0.0);// Calculate diffuse impact by generating dot product of normal and light
+		vec3 diffuseFill = impact * fillLightColor; // Generate diffuse light color
+
+		/* Calculate Specular lighting for key light */
+		float specularIntensity = 1.0f; // Set specular light strength to 100%
 		float highlightSize = 16.0f; // Set specular highlight size
 		vec3 viewDir = normalize(viewPosition - vertexFragmentPos); // Calculate view direction
-		vec3 reflectDir = reflect(-lightDirection, norm);// Calculate reflection vector
-		//Calculate specular component
+		vec3 reflectDir = reflect(-keyLightDirection, norm);// Calculate reflection vector
+		// Calculate specular component for key light
 		float specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
-		vec3 specular = specularIntensity * specularComponent * lightColor;
+		vec3 specularKey = specularIntensity * specularComponent * keyLightColor;
+
+		/* Calculate Specular light for fill light */
+		specularIntensity = 1.0f;	// Set specular light strength to 100%
+		reflectDir = reflect(-fillLightDirection, norm);// Calculate reflection vector
+		// Calculate specular component for fill light
+		specularComponent = pow(max(dot(viewDir, reflectDir), 0.0), highlightSize);
+		vec3 specularFill = specularIntensity * specularComponent * fillLightColor;
 
 		// Texture holds the color to be used for all three components
-		vec4 textureColor = texture(uTexture, vertexTextureCoordinate * uvScale);
+		vec4 textureColor = texture(uTexture, vertexTextureCoordinate);
 
 		// Calculate phong result
-		vec3 phong = (ambient + diffuse + specular) * textureColor.xyz;
+		vec3 phong = (ambient + diffuseKey + specularKey + diffuseFill + specularFill) * textureColor.xyz;
 
 		fragmentColor = vec4(phong, 1.0); // Send lighting results to GPU
 	}
@@ -175,11 +184,10 @@ namespace ShaderNormalsTex
 
 ////////////////////////////////////////////////////////////////
 // Render light sources
-//
 namespace ShaderLight
 {
 	/* Lamp Shader Source Code*/
-	const GLchar* vertexShaderSource = GLSL(440,
+	const GLchar* const vertexShaderSource = GLSL(440,
 
 		layout(location = 0) in vec3 position; // VAP position 0 for vertex position data
 
@@ -195,13 +203,17 @@ namespace ShaderLight
 	);
 
 	/* Fragment Shader Source Code*/
-	const GLchar* fragmentShaderSource = GLSL(440,
+	const GLchar* const fragmentShaderSource = GLSL(440,
 
 		out vec4 fragmentColor; // For outgoing lamp color (smaller cube) to the GPU
 
+	// Uniforms for changing the color and intensity of the light
+	//uniform vec3 lightColor;
+	//uniform float lightIntensity;
+
 	void main()
 	{
-		fragmentColor = vec4(1.0f); // Set color to white (1.0f,1.0f,1.0f) with alpha 1.0
+		fragmentColor = vec4(1.0f);
 	}
 	);
 }

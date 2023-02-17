@@ -11,8 +11,8 @@
 #include "includes/stb_image.h"
 
 // Scale, translate, and rotate a shape
-void UTranslateShape(Shape* shape, glm::vec3 scale, glm::vec3 translation, float rotation , const View* view);
+void UTranslateShape(Shape* shape, glm::vec3 scale, glm::vec3 translation, float rotation, const View* view);
 
 // Load Texture
-bool ULoadTexture(const char* imagePath, Shape* shape);
+bool ULoadTexture(const char* imagePath, GLuint& textId);
 void UFlipImageVertically(unsigned char* image, int width, int height, int channels);

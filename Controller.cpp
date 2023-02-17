@@ -1,12 +1,11 @@
 #include "Controller.h"
 
-Controller::Controller() : cView() {}
-
 Controller::Controller(View* view) : cView(view) {}
 
 // Render shapes. Must call Controller::initialize and View::createShaderProgram first
 void Controller::run(int argc, char* argv[])
 {
+	// Looking into moving render loop here
 }
 
 void Controller::foundGlError(const char* line)
@@ -38,8 +37,8 @@ bool Controller::initialize(int argc, char* argv[])
 
 	// GLFW: window creation
 	// ---------------------
-	cView->vWindow = glfwCreateWindow(cView->WINDOW_WIDTH, cView->WINDOW_HEIGHT, cView->WINDOW_TITLE, nullptr, nullptr);
-	if (cView->vWindow == nullptr)
+	cView->setWindow(glfwCreateWindow(cView->WINDOW_WIDTH, cView->WINDOW_HEIGHT, cView->WINDOW_TITLE, nullptr, nullptr));
+	if (cView->getWindow() == nullptr)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -47,19 +46,19 @@ bool Controller::initialize(int argc, char* argv[])
 	}
 
 	// Set the window user pointer to the View instance
-	glfwSetWindowUserPointer(cView->vWindow, this);
+	glfwSetWindowUserPointer(cView->getWindow(), this);
 
 	// Context
-	glfwMakeContextCurrent(cView->vWindow);
+	glfwMakeContextCurrent(cView->getWindow());
 
 	// Callbacks
-	glfwSetFramebufferSizeCallback(cView->vWindow, View::resizeWindowWrapper);
-	glfwSetCursorPosCallback(cView->vWindow, mousePositionWrapper);
-	glfwSetScrollCallback(cView->vWindow, mouseScrollWrapper);
-	glfwSetKeyCallback(cView->vWindow, viewModeToggleWrapper);
+	glfwSetFramebufferSizeCallback(cView->getWindow(), View::resizeWindowWrapper);
+	glfwSetCursorPosCallback(cView->getWindow(), mousePositionWrapper);
+	glfwSetScrollCallback(cView->getWindow(), mouseScrollWrapper);
+	glfwSetKeyCallback(cView->getWindow(), viewModeToggleWrapper);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(cView->vWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(cView->getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// GLEW: initialize
 	// ----------------
@@ -79,97 +78,60 @@ bool Controller::initialize(int argc, char* argv[])
 	return true;
 }
 
-void Controller::addShape(Shape* shape)
-{
-	cShapes.push_back(shape);
-}
-
 void Controller::processInput()
 {
+	Camera& camera = cView->getCamera();
+
 	// Exit
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(cView->vWindow, true);
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(cView->getWindow(), true);
 
 	// Built-in Camera methods for movement
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_W) == GLFW_PRESS)
-		cView->vCamera.ProcessKeyboard(FORWARD, cDeltaTime);
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_S) == GLFW_PRESS)
-		cView->vCamera.ProcessKeyboard(BACKWARD, cDeltaTime);
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_A) == GLFW_PRESS)
-		cView->vCamera.ProcessKeyboard(LEFT, cDeltaTime);
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_D) == GLFW_PRESS)
-		cView->vCamera.ProcessKeyboard(RIGHT, cDeltaTime);
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_W) == GLFW_PRESS)
+		camera.ProcessKeyboard(FORWARD, cDeltaTime);
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_S) == GLFW_PRESS)
+		camera.ProcessKeyboard(BACKWARD, cDeltaTime);
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_A) == GLFW_PRESS)
+		camera.ProcessKeyboard(LEFT, cDeltaTime);
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_D) == GLFW_PRESS)
+		camera.ProcessKeyboard(RIGHT, cDeltaTime);
 
 	// Up and down movement
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_E) == GLFW_PRESS)
-		cView->vCamera.Position += cView->vCamera.Up * cView->vCamera.MovementSpeed * cDeltaTime;
-	if (glfwGetKey(cView->vWindow, GLFW_KEY_Q) == GLFW_PRESS)
-		cView->vCamera.Position -= cView->vCamera.Up * cView->vCamera.MovementSpeed * cDeltaTime;
-}
-
-void Controller::setViewModePerspective()
-{
-	// Transforms the camera: move the camera back (z axis)
-	glm::mat4 view = cView->vCamera.GetViewMatrix();
-
-	glm::mat4 projection = glm::perspective(glm::radians(cView->vCamera.Zoom), (GLfloat)cView->WINDOW_WIDTH / (GLfloat)cView->WINDOW_HEIGHT, 0.1f, 100.0f);
-
-	// Retrieves and passes transform matrices to the Shader program
-	GLint viewLoc = glGetUniformLocation(cView->vProgramId, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-	GLint projLoc = glGetUniformLocation(cView->vProgramId, "projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-}
-
-void Controller::setViewModeOrthographic()
-{
-	// Transforms the camera: move the camera back (z axis)
-	glm::mat4 view = cView->vCamera.GetViewMatrix();
-
-	glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
-
-	// Retrieves and passes transform matrices to the Shader program
-	GLint viewLoc = glGetUniformLocation(cView->vProgramId, "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-	GLint projLoc = glGetUniformLocation(cView->vProgramId, "projection");
-	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_E) == GLFW_PRESS)
+		camera.Position += cView->getCamera().Up * cView->getCamera().MovementSpeed * cDeltaTime;
+	if (glfwGetKey(cView->getWindow(), GLFW_KEY_Q) == GLFW_PRESS)
+		camera.Position -= cView->getCamera().Up * cView->getCamera().MovementSpeed * cDeltaTime;
 }
 
 void Controller::viewModeToggleCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
-		cView->isOrtho = !cView->isOrtho;	// Flip value
+		cView->switchViewType();	// Flip value
 }
 
 void Controller::mousePositionCallback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (cView->vFirstMouse)
+	Camera& camera = cView->getCamera();
+
+	if (cView->getFirstMouse())
 	{
-		cView->vLastX = (float)xpos;
-		cView->vLastY = (float)ypos;
-		cView->vFirstMouse = false;
+		cView->setLastX((float)xpos);
+		cView->setLastY((float)ypos);
+		cView->setFirstMouse(false);
 	}
 
-	float xoffset = (float)xpos - cView->vLastX;
-	float yoffset = cView->vLastY - (float)ypos; // reversed since y-coordinates go from bottom to top
+	float xoffset = (float)xpos - cView->getLastX();
+	float yoffset = cView->getLastY() - (float)ypos; // reversed since y-coordinates go from bottom to top
 
-	cView->vLastX = (float)xpos;
-	cView->vLastY = (float)ypos;
+	cView->setLastX((float)xpos);
+	cView->setLastY((float)ypos);
 
-	cView->vCamera.ProcessMouseMovement(xoffset, yoffset);
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 void Controller::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	static const float cameraSpeed = 2.5f;
-
-	cView->vCamera.MovementSpeed += cameraSpeed * (float)yoffset;
-	if (cView->vCamera.MovementSpeed < cameraSpeed)
-		cView->vCamera.MovementSpeed = cameraSpeed;
-	if (cView->vCamera.MovementSpeed > cameraSpeed * 3.0f)
-		cView->vCamera.MovementSpeed = cameraSpeed * 3.0f;
+	cView->setCameraSpeed(yoffset);
 }
 
 void Controller::viewModeToggleWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)

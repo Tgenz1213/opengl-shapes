@@ -18,6 +18,10 @@ public:
 	virtual void createTextureCoordinates() = 0;
 	virtual void createIndices() = 0;
 
+	// Methods
+	void bindVertexArrayAndBuffers();
+	void generateInterleavedVertices();
+
 	// Setters
 	void setVertices(std::vector<GLfloat> const& vert) { vertices = vert; }
 	void setNormals(std::vector<GLfloat> const& norm) { normals = norm; }
@@ -36,8 +40,6 @@ public:
 	std::vector<GLuint> getIndices() const { return indices; }
 
 	// Draw
-	void bindVertexArrayAndBuffers();
-	void generateInterleavedVertices();
 	void draw() const;
 
 	// Attributes
@@ -52,6 +54,4 @@ public:
 	std::vector<GLfloat> texCoords;
 	std::vector<GLfloat> interleavedVertices;	// vertices-normals-texCords
 	std::vector<GLuint> indices;
-
-
 };

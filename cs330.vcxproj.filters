@@ -75,6 +75,9 @@
     <ClCompile Include="UCylinder.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="Shaders.h">
       <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Shape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

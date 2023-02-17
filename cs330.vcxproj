@@ -22,6 +22,7 @@
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="includes\cylinderShader\src\Cylinder.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PyramidSqBase.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="includes\cylinderShader\src\Cylinder.h" />
     <ClInclude Include="includes\stb_image.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="PyramidSqBase.h" />
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Shape.h" />

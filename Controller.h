@@ -8,14 +8,13 @@ class Controller
 {
 public:
 	// Constructors and deconstructor
-	Controller();
+	Controller() = default;
 	explicit Controller(View* view);
 	virtual ~Controller() = default;
 
 	// Methods
 	void run(int argc, char* argv[]);
 	bool initialize(int argc, char* argv[]);
-	void addShape(Shape* shape);	// Not really used right now. Need to find way to draw shapes the same way to loop through them.
 
 	// Attributes
 	std::vector<Shape*> cShapes;
@@ -25,8 +24,6 @@ public:
 
 	// Methods
 	void processInput();
-	void setViewModePerspective();
-	void setViewModeOrthographic();
 
 private:
 	// Callbacks
