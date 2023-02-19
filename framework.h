@@ -12,8 +12,5 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-// Cylinder
-#include "includes/cylinderShader/src/Cylinder.h"
-
 // Camera
 #include "includes/learnOpengl/camera.h"

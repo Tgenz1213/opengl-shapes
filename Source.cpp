@@ -5,30 +5,21 @@ int main(int argc, char* argv[])
 	// Method variables
 	GLuint shapeProgramId{};
 	GLuint lightProgramId{};
-	GLuint woodTexId{};
-	GLuint orangeTexId{};
-	GLuint tileTexId{};
 
-	// Initialize view and factory
+	// Initialize classes
 	View mView;
 	ShapeFactory mFactory;
-	const char* textureFilenameWood = "C:/Users/Tim/source/repos/cs330/resources/woodgrain.jpg";
-	const char* textureFilenameOrange = "C:/Users/Tim/source/repos/cs330/resources/orange.jpg";
-	const char* textureFilenameTile = "C:/Users/Tim/source/repos/cs330/resources/tile.jpg";
-
-	// Initialize controller
 	Controller mController(&mView);
 
 	if (!mController.initialize(argc, argv))
 		return EXIT_FAILURE;
 
-	// Create shapes for tape measure
-	Cube mCubeSmall = mFactory.createCube();
-	Cube mCubeLarge = mFactory.createCube();
-	UCylinder mCylinder = mFactory.createCylinder();
-	Plane mPlane = mFactory.createPlane();
+	// Complex objects
+	ComplexShape::TapeMeasure mTapeMeasure;
+	ComplexShape::WhiskeyBottle mBottle;
+	ComplexShape::Floor mFloor;
 
-	// Lights
+	// Lights, primitive shapes with no texture
 	Cube mLightCubeKey = mFactory.createCube();
 	Cube mLightCubeFill = mFactory.createCube();
 
@@ -41,43 +32,31 @@ int main(int argc, char* argv[])
 	if (!mView.createShaderProgram(ShaderLight::vertexShaderSource, ShaderLight::fragmentShaderSource))
 		return EXIT_FAILURE;
 
-	// Load textures
 	lightProgramId = mView.getProgramId();
 
+	// Set up complex shapes
 	mView.useProgram(shapeProgramId);
 
-	// Wood texture
-	if (!ULoadTexture(textureFilenameWood, woodTexId))
+	if (!UInitializeTapeMeasure(mView, mFactory, mTapeMeasure))
 	{
-		std::cout << "Failed to load cube texture " << woodTexId << std::endl;
+		std::cout << "Failed to initialize tape measure" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	glUniform1i(glGetUniformLocation(mView.getProgramId(), "uTexture"), 0);
-
-	// Orange texture
-	if (!ULoadTexture(textureFilenameOrange, orangeTexId))
+	if (!UInitializeWhiskeyBottle(mView, mFactory, mBottle))
 	{
-		std::cout << "Failed to load cylinder texture " << orangeTexId << std::endl;
+		std::cout << "Failed to initialize whiskey bottle" << std::endl;
 		return EXIT_FAILURE;
 	}
-
-	glUniform1i(glGetUniformLocation(mView.getProgramId(), "uTexture"), 1);
 
 	// Tile texture
-	if (!ULoadTexture(textureFilenameTile, tileTexId))
+	if (!UInitializeFloor(mView, mFactory, mFloor))
 	{
-		std::cout << "Failed to load cylinder texture " << tileTexId << std::endl;
+		std::cout << "Failed to initialize floor" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	glUniform1i(glGetUniformLocation(mView.getProgramId(), "uTexture"), 2);
-
 	// Associate shapes with textures
-	mCubeLarge.texId = woodTexId;
-	mCubeSmall.texId = woodTexId;
-	mCylinder.texId = orangeTexId;
-	mPlane.texId = tileTexId;
 
 	// Set background color to black
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -108,38 +87,24 @@ int main(int argc, char* argv[])
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Render shapes
-
-		// Commented out the tape measure shapes for assignment 6-3
-
-		// Draw cubes
-		UTranslateShape(&mCubeSmall, glm::vec3(1.0f, 1.0f, 0.75f), glm::vec3(-0.3f, -0.5f, 0.0f), 0, &mView); // Retrieves and passes transform matrices to the Shader program
-		mView.drawShape(mCubeSmall);
-
-		UTranslateShape(&mCubeLarge, glm::vec3(1.0f, 1.0f, 0.99f), glm::vec3(0.5f, -0.5f, 0.0f), 0, &mView);
-		mView.drawShape(mCubeLarge);
-
-		// Draw cylinder
-		UTranslateShape(&mCylinder, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), 0, &mView);
-		mView.drawShape(mCylinder);
-
-		// Draw cylinder
-		UTranslateShape(&mPlane, glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, -0.501f, 0.0f), 0, &mView);
-		mView.drawShape(mPlane);
+		UDrawTapeMeasure(mView, mTapeMeasure);
+		UDrawWhiskeyBottle(mView, mBottle);
+		UDrawFloor(mView, mFloor);
 
 		// Set view mode. Variable changed with P key press
 		mView.setViewModePerspective();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Render lights
+		// Render lighting
 
 		// Key light data
-		glm::vec3 keyLightColor(1.0f, 1.0f, 1.0f);
-		glm::vec3 keyLightPosition(7.0f, 0.5f, 7.0f);
+		glm::vec3 keyLightColor(1.0f, 1.0f, 1.0f);	// White
+		glm::vec3 keyLightPosition(7.0f, 2.0f, 7.0f);
 		glm::vec3 keyLightScale(0.3f);
 
 		// Fill light data
-		glm::vec3 fillLightColor(1.0f, 1.0f, 1.0f);		// 10% intensity
-		glm::vec3 fillLightPosition(-7.0f, 0.5f, -7.0f);	// Opposite side of key light
+		glm::vec3 fillLightColor(0.0f, 0.3f, 0.3f);		// Greenish
+		glm::vec3 fillLightPosition(-5.0f, 3.0f, -5.0f);	// Opposite side of key light, little higher
 		glm::vec3 fillLightScale(0.3f);
 
 		// Reference matrix uniforms from the Shape Shader program for the light color, light position, and camera position
@@ -163,25 +128,18 @@ int main(int argc, char* argv[])
 		mView.useProgram(lightProgramId);
 
 		// Key light
-		UTranslateShape(&mLightCubeKey, keyLightScale, keyLightPosition, 0.0f, &mView);
-
-		mView.setViewModePerspective();
-
-		// Draw key light
+		UTranslateShape(mView, keyLightScale, keyLightPosition, glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, &mLightCubeKey);
 		glBindVertexArray(mLightCubeKey.vao);
 		mLightCubeKey.draw();
 		glBindVertexArray(0);
 
 		//Transform the smaller cube used as a visual que for the light source
-		UTranslateShape(&mLightCubeFill, fillLightScale, fillLightPosition, 0.0f, &mView);
-
-		mView.setViewModePerspective();
-
-		// Draw key light
+		UTranslateShape(mView, fillLightScale, fillLightPosition, glm::vec3(0.0f, 0.0f, 0.0f), 0.0f, &mLightCubeFill);
 		glBindVertexArray(mLightCubeFill.vao);
 		mLightCubeFill.draw();
 		glBindVertexArray(0);
-		// End fill light
+
+		mView.setViewModePerspective();
 
 		// Swap buffers
 		glfwSwapBuffers(mView.getWindow());
@@ -191,8 +149,9 @@ int main(int argc, char* argv[])
 	}
 
 	// Release textures
-	glGenTextures(1, &woodTexId);
-	glGenTextures(1, &orangeTexId);
+	glGenTextures(1, &mTapeMeasure.woodTexId);
+	glGenTextures(1, &mTapeMeasure.orangeTexId);
+	glGenTextures(1, &mFloor.tileTexId);
 
 	// Release shader program
 	mView.destroyShaderProgram(shapeProgramId);
@@ -201,8 +160,7 @@ int main(int argc, char* argv[])
 	exit(EXIT_SUCCESS); // Terminates the program successfully
 }
 
-// Add texture to shape
-bool ULoadTexture(const char* imagePath, GLuint& texId)
+bool ULoadTexture(const View& view, const char* imagePath, GLuint& texId)
 {
 	int width;
 	int height;
@@ -237,10 +195,13 @@ bool ULoadTexture(const char* imagePath, GLuint& texId)
 		stbi_image_free(image);
 		glBindTexture(GL_TEXTURE_2D, 0); // Unbind the texture.
 
+		glUniform1i(glGetUniformLocation(view.getProgramId(), "uTexture"), texId);
+
 		return true;
 	}
 
 	// Error loading the image
+	std::cout << "Failed to load texture " << texId << std::endl;
 	return false;
 }
 
@@ -269,19 +230,134 @@ void UFlipImageVertically(unsigned char* image, int width, int height, int chann
 	}
 }
 
-// Modifies a shape to rotate, scale, and translate
-void UTranslateShape(Shape* shape, glm::vec3 scale, glm::vec3 translation, float rotation, const View* view)
+bool UInitializeTapeMeasure(const View& view, const ShapeFactory& factory, ComplexShape::TapeMeasure& tapeMeasure)
 {
-	// 1. Scales the object
+	// Create shapes for tape measure
+	tapeMeasure.largeCube = factory.createCube();
+	tapeMeasure.smallCube = factory.createCube();
+	tapeMeasure.cylinder = factory.createCylinder(1.0f, 1.0f, 1.0f, 36, 3);
+
+	// Load wood texture
+	if (!ULoadTexture(view, tapeMeasure.textureFilenameWood, tapeMeasure.woodTexId))
+		return false;
+
+	// Load orange texture
+	if (!ULoadTexture(view, tapeMeasure.textureFilenameOrange, tapeMeasure.orangeTexId))
+		return false;
+
+	// Assign texture IDs to objects
+	tapeMeasure.largeCube.texId = tapeMeasure.woodTexId;
+	tapeMeasure.smallCube.texId = tapeMeasure.woodTexId;
+	tapeMeasure.cylinder.texId = tapeMeasure.orangeTexId;
+
+	return true;
+}
+
+bool UInitializeWhiskeyBottle(const View& view, const ShapeFactory& factory, ComplexShape::WhiskeyBottle& bottle)
+{
+	bottle.cap = factory.createCylinder(0.2f, 0.2f, 0.2f, 32, 3);
+	bottle.neck = factory.createCylinder(0.4f, 0.2f, 1.0f, 32, 4);
+	bottle.neckBase = factory.createSphere(0.999f, 16, 16);
+	bottle.body = factory.createCylinder(1.0f, 1.0f, 3.0f, 32, 4);
+	bottle.bodyBase = factory.createTorus(0.9f, 0.1f, 32);
+
+	if (!ULoadTexture(view, bottle.textureFilenameIce, bottle.iceTexId))
+		return false;
+
+	if (!ULoadTexture(view, bottle.textureFilenameGold, bottle.goldTexId))
+		return false;
+
+	bottle.bodyBase.texId = bottle.iceTexId;
+	bottle.body.texId = bottle.goldTexId;
+	bottle.neckBase.texId = bottle.iceTexId;
+	bottle.neck.texId = bottle.iceTexId;
+	bottle.cap.texId = bottle.goldTexId;
+
+	return true;
+}
+
+bool UInitializeFloor(const View& view, const ShapeFactory& factory, ComplexShape::Floor& floor)
+{
+	floor.plane = factory.createPlane();
+
+	if (!ULoadTexture(view, floor.textureFilenameTile, floor.tileTexId))
+		return false;
+
+	floor.plane.texId = floor.tileTexId;
+
+	return true;
+}
+
+void UDrawTapeMeasure(const View& view, ComplexShape::TapeMeasure& tapeMeasure)
+{
+	// Draw tape measure
+	glm::vec3 tapeMeasureTranslation(-1.0f, 0.0f, 0.0f); // complex shape translation
+	glm::vec3 smallCubeTranslation(-0.3f, 0.0f, 0.5f); // smallCube translation
+	glm::vec3 largeCubeTranslation(0.5f, 0.0f, 0.5001f); // largeCube translation
+
+	// Draw cubes
+	UTranslateShape(view, glm::vec3(1.0f, 0.75f, 1.0f), smallCubeTranslation, tapeMeasureTranslation, 0.0f, &tapeMeasure.smallCube);
+	view.drawShape(tapeMeasure.smallCube);
+
+	UTranslateShape(view, glm::vec3(1.0f, 0.99f, 1.0f), largeCubeTranslation, tapeMeasureTranslation, 0.0f, &tapeMeasure.largeCube);
+	view.drawShape(tapeMeasure.largeCube);
+
+	// Draw cylinder
+
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), tapeMeasureTranslation, 0.0f, &tapeMeasure.cylinder);
+	view.drawShape(tapeMeasure.cylinder);
+}
+
+void UDrawWhiskeyBottle(const View& view, ComplexShape::WhiskeyBottle& bottle)
+{
+	glm::vec3 bottleTranslation(1.5f, 0.0f, 0.0f);
+
+	glm::vec3 bodyBaseTranslation(0.0f, -0.4f, 0.0f);
+	glm::vec3 bodyTranslation(0.0f, 1.1f, 0.0f);
+	glm::vec3 neckBaseTranslation(0.0f, 2.5f, 0.0f);
+	glm::vec3 neckTranslation(0.0f, 3.6f, 0.0f);
+	glm::vec3 capTranslation(0.0f, 4.2f, 0.0f);
+
+	// Bottom to top
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), bodyBaseTranslation, bottleTranslation, 0.0f, &bottle.bodyBase);
+	view.drawShape(bottle.bodyBase);
+
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), bodyTranslation, bottleTranslation, 0.0f, &bottle.body);
+	view.drawShape(bottle.body);
+
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), neckBaseTranslation, bottleTranslation, 0.0f, &bottle.neckBase);
+	view.drawShape(bottle.neckBase);
+
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), neckTranslation, bottleTranslation, 0.0f, &bottle.neck);
+	view.drawShape(bottle.neck);
+
+	UTranslateShape(view, glm::vec3(1.0f, 1.0f, 1.0f), capTranslation, bottleTranslation, 0.0f, &bottle.cap);
+	view.drawShape(bottle.cap);
+}
+
+void UDrawFloor(const View& view, ComplexShape::Floor& floor)
+{
+	glm::vec3 floorTranslation(0.0f, -0.501f, 0.0f);
+
+	UTranslateShape(view, glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), floorTranslation, 0.0f, &floor.plane);
+	view.drawShape(floor.plane);
+}
+
+// Modifies primitive shape to rotate, scale, and translate and translates shapes part of a complex translation equally.
+void UTranslateShape(const View& view, const glm::vec3 scale, const glm::vec3 primitiveTranslation, const glm::vec3 complexTranslation, const float rotation, Shape* shape)
+{
+	// 1. Place object from the origin. PrimitiveTranslation moves the individual shape to form the
+	// complex shape. ComplexTranslation moves all of the primitives together.
+	glm::mat4 translationMatrix = glm::translate(primitiveTranslation + complexTranslation);
+	// 2. Scales the object
 	glm::mat4 scaleMatrix = glm::scale(scale);
-	// 2. Rotates shape in the x axis
+	// 3. Rotates shape in the x axis
 	glm::mat4 rotationMatrix = glm::rotate(rotation, glm::vec3(1.0f, 1.0f, 1.0f));
-	// 3. Place object from the origin
-	glm::mat4 translationMatrix = glm::translate(translation);
+
 	// Model matrix: transformations are applied right-to-left order
-	shape->model = scaleMatrix * rotationMatrix * translationMatrix;
+	shape->model = translationMatrix * scaleMatrix * rotationMatrix;
 
 	// Retrieves and passes transform matrices to the Shader program
-	GLint modelLoc = glGetUniformLocation(view->getProgramId(), "model");
+	GLint modelLoc = glGetUniformLocation(view.getProgramId(), "model");
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(shape->model));
 }

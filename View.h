@@ -8,6 +8,7 @@
 #define GLSL(Version, Source) "#version " #Version " core \n" #Source
 #endif
 
+// Manages what is displayed on the screen
 class View
 {
 public:
@@ -56,7 +57,7 @@ private:
 	Camera vCamera;
 	GLuint currentProgramId{};
 
-	glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 5.0f);
+	glm::vec3 cameraPosition = glm::vec3(0.0f, 2.0f, 10.0f);
 	float vLastX = (float)WINDOW_WIDTH / 2.0f;
 	float vLastY = (float)WINDOW_HEIGHT / 2.0f;
 	bool vFirstMouse = true;

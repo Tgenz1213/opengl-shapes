@@ -16,9 +16,6 @@
     <Filter Include="Source Files\Shape">
       <UniqueIdentifier>{8a5fe5f4-7d18-46a6-8d5e-f55cfb8b0e75}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Includes">
-      <UniqueIdentifier>{55244069-f410-45c2-8933-b9b3bdeb0e14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\View">
       <UniqueIdentifier>{02d82814-11ad-49d8-bb13-0c1a1232e24f}</UniqueIdentifier>
     </Filter>
@@ -57,9 +54,6 @@
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="includes\cylinderShader\src\Cylinder.cpp">
-      <Filter>Source Files\Includes</Filter>
-    </ClCompile>
     <ClCompile Include="View.cpp">
       <Filter>Source Files\View</Filter>
     </ClCompile>
@@ -72,17 +66,20 @@
     <ClCompile Include="PyramidSqBase.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="UCylinder.cpp">
+    <ClCompile Include="Cylinder.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
     <ClCompile Include="Plane.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
+    <ClCompile Include="Torus.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -101,22 +98,28 @@
     <ClInclude Include="View.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
-    <ClInclude Include="includes\cylinderShader\src\Cylinder.h">
-      <Filter>Header Files\Includes</Filter>
-    </ClInclude>
     <ClInclude Include="includes\stb_image.h">
       <Filter>Header Files\Includes</Filter>
     </ClInclude>
     <ClInclude Include="PyramidSqBase.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="UCylinder.h">
+    <ClInclude Include="Cylinder.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
     <ClInclude Include="Shaders.h">
       <Filter>Header Files\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Torus.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
   </ItemGroup>

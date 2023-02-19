@@ -1,10 +1,8 @@
-// Abstract base class for shapes
-// Eventually I want to calculate the normals rather than hard code them in every new shape
-
 #pragma once
 
 #include "framework.h"
 
+// Abstract class for creating user-defined primitive shapes
 class Shape
 {
 public:
@@ -43,10 +41,10 @@ public:
 	void draw() const;
 
 	// Attributes
-	GLuint vao;
-	GLuint vbo;
-	GLuint ebo;
-	GLuint texId;
+	GLuint vao{};
+	GLuint vbo{};
+	GLuint ebo{};
+	GLuint texId{};
 	GLint stride = 32;
 	glm::mat4 model = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));			// Use by View to transform
 	std::vector<GLfloat> vertices;

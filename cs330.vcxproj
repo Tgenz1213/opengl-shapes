@@ -21,20 +21,20 @@
   <ItemGroup>
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="includes\cylinderShader\src\Cylinder.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="PyramidSqBase.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="ShapeFactory.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="UCylinder.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Torus.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="includes\cylinderShader\src\Cylinder.h" />
     <ClInclude Include="includes\stb_image.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PyramidSqBase.h" />
@@ -42,7 +42,9 @@
     <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeFactory.h" />
     <ClInclude Include="Source.h" />
-    <ClInclude Include="UCylinder.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Torus.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="View.h" />
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\OpenGL\GLAD\glad;C:\OpenGL\freeglut\freeglut-master\include;C:\OpenGL\lib;C:\OpenGL\glm;C:\OpenGL\GLEW\include;C:\OpenGL\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\OpenGL\GLAD\glad;C:\OpenGL\freeglut\freeglut-master\include;C:\OpenGL\glm;C:\OpenGL\GLEW\include;C:\OpenGL\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
