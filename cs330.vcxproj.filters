@@ -48,79 +48,82 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Source Files\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source Files\Shape</Filter>
-    </ClCompile>
-    <ClCompile Include="View.cpp">
-      <Filter>Source Files\View</Filter>
-    </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="controller\Controller.cpp">
       <Filter>Source Files\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="ShapeFactory.cpp">
+    <ClCompile Include="factory\ShapeFactory.cpp">
       <Filter>Source Files\Factory</Filter>
     </ClCompile>
-    <ClCompile Include="PyramidSqBase.cpp">
+    <ClCompile Include="shapes\Cube.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="Cylinder.cpp">
+    <ClCompile Include="shapes\Cylinder.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp">
+    <ClCompile Include="shapes\Plane.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="Torus.cpp">
+    <ClCompile Include="shapes\PyramidSqBase.cpp">
       <Filter>Source Files\Shape</Filter>
     </ClCompile>
-    <ClCompile Include="Sphere.cpp">
+    <ClCompile Include="shapes\Shape.cpp">
       <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="shapes\Sphere.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="shapes\Torus.cpp">
+      <Filter>Source Files\Shape</Filter>
+    </ClCompile>
+    <ClCompile Include="view\View.cpp">
+      <Filter>Source Files\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>Header Files\Shape</Filter>
-    </ClInclude>
     <ClInclude Include="ShapeFactory.h">
       <Filter>Header Files\ShapeFactory</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller.h">
-      <Filter>Header Files\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="View.h">
-      <Filter>Header Files\View</Filter>
     </ClInclude>
     <ClInclude Include="includes\stb_image.h">
       <Filter>Header Files\Includes</Filter>
     </ClInclude>
-    <ClInclude Include="PyramidSqBase.h">
-      <Filter>Header Files\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Cylinder.h">
-      <Filter>Header Files\Shape</Filter>
-    </ClInclude>
-    <ClInclude Include="Shaders.h">
-      <Filter>Header Files\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>Header Files\Shape</Filter>
-    </ClInclude>
     <ClInclude Include="Source.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Torus.h">
+    <ClInclude Include="shapes\Cube.h">
       <Filter>Header Files\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
+    <ClInclude Include="shapes\Plane.h">
       <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\Shape.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\Torus.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\Cylinder.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\Sphere.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\PyramidSqBase.h">
+      <Filter>Header Files\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="view\Shaders.h">
+      <Filter>Header Files\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="controller\Controller.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="factory\ShapeFactory.h">
+      <Filter>Header Files\ShapeFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="view\View.h">
+      <Filter>Header Files\View</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

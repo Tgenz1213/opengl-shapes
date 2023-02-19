@@ -19,33 +19,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="Plane.cpp" />
-    <ClCompile Include="PyramidSqBase.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="ShapeFactory.cpp" />
+    <ClCompile Include="controller\Controller.cpp" />
+    <ClCompile Include="factory\ShapeFactory.cpp" />
+    <ClCompile Include="shapes\Cube.cpp" />
+    <ClCompile Include="shapes\Cylinder.cpp" />
+    <ClCompile Include="shapes\Plane.cpp" />
+    <ClCompile Include="shapes\PyramidSqBase.cpp" />
+    <ClCompile Include="shapes\Shape.cpp" />
+    <ClCompile Include="shapes\Sphere.cpp" />
+    <ClCompile Include="shapes\Torus.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Torus.cpp" />
-    <ClCompile Include="Cylinder.cpp" />
-    <ClCompile Include="View.cpp" />
+    <ClCompile Include="view\View.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Controller.h" />
-    <ClInclude Include="Cube.h" />
+    <ClInclude Include="controller\Controller.h" />
+    <ClInclude Include="factory\ShapeFactory.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="includes\stb_image.h" />
-    <ClInclude Include="Plane.h" />
-    <ClInclude Include="PyramidSqBase.h" />
-    <ClInclude Include="Shaders.h" />
-    <ClInclude Include="Shape.h" />
     <ClInclude Include="ShapeFactory.h" />
+    <ClInclude Include="shapes\Cube.h" />
+    <ClInclude Include="shapes\Cylinder.h" />
+    <ClInclude Include="shapes\Plane.h" />
+    <ClInclude Include="shapes\PyramidSqBase.h" />
+    <ClInclude Include="shapes\Shape.h" />
+    <ClInclude Include="shapes\Sphere.h" />
+    <ClInclude Include="shapes\Torus.h" />
     <ClInclude Include="Source.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="Torus.h" />
-    <ClInclude Include="Cylinder.h" />
-    <ClInclude Include="View.h" />
+    <ClInclude Include="view\Shaders.h" />
+    <ClInclude Include="view\View.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\woodgrain.jpg" />
@@ -137,13 +138,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes\GLAD\glad;$(ProjectDir)includes\glm;$(ProjectDir)includes\GLEW\include;$(ProjectDir)includes\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)includes\GLAD\glad;$(ProjectDir)includes\glm;$(ProjectDir)includes\GLEW\include;$(ProjectDir)includes\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)includes\GLEW\lib\Release\x64;$(ProjectDir)includes\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(ProjectDir)includes\GLEW\lib\Release\x64;$(ProjectDir)includes\GLFW\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

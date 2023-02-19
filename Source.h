@@ -1,10 +1,11 @@
 #pragma once
 
 #include "framework.h"
-#include "Controller.h"
-#include "View.h"
-#include "ShapeFactory.h"
-#include "Shaders.h"
+#include "controller/Controller.h"
+#include "view/View.h"
+#include "factory/ShapeFactory.h"
+#include "view/Shaders.h"
+
 // Image loader
 #define STB_IMAGE_IMPLEMENTATION
 #include "includes/stb_image.h"
@@ -26,8 +27,8 @@ namespace ComplexShape
 		GLuint orangeTexId{};
 
 		// Texture file locations
-		const char* textureFilenameOrange = "C:/Users/Tim/source/repos/cs330/resources/orange.jpg";
-		const char* textureFilenameWood = "C:/Users/Tim/source/repos/cs330/resources/woodgrain.jpg";
+		const char* textureFilenameOrange = "resources/orange.jpg";
+		const char* textureFilenameWood = "resources/woodgrain.jpg";
 	};
 
 	// Uses three different primitive shapes
@@ -45,8 +46,8 @@ namespace ComplexShape
 		GLuint goldTexId{};
 
 		// File locations
-		const char* textureFilenameIce = "C:/Users/Tim/source/repos/cs330/resources/ice.jpg";
-		const char* textureFilenameGold = "C:/Users/Tim/source/repos/cs330/resources/gold.jpg";
+		const char* textureFilenameIce = "resources/ice.jpg";
+		const char* textureFilenameGold = "resources/gold.jpg";
 	};
 
 	// Simple plane

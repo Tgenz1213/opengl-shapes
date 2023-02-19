@@ -1,15 +1,15 @@
 #pragma once
 
 #include "framework.h"
-#include "Shape.h"
-#include "View.h"
+#include "shapes/Shape.h"
+#include "view/View.h"
 
 class Controller
 {
 public:
 	// Constructors and deconstructor
 	Controller() = default;
-	explicit Controller(View* view);
+	explicit Controller(View* view) : cView(view) {}
 	virtual ~Controller() = default;
 
 	// Methods
@@ -35,7 +35,4 @@ private:
 	static void viewModeToggleWrapper(GLFWwindow*, int key, int scancode, int action, int mods);
 	static void mousePositionWrapper(GLFWwindow* window, double xpos, double ypos);
 	static void mouseScrollWrapper(GLFWwindow* window, double xoffset, double yoffset);
-
-	// Debugging
-	void foundGlError(const char* line);
 };

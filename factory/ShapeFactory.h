@@ -1,11 +1,11 @@
 #pragma once
-#include "Shape.h"
-#include "Cube.h"
-#include "PyramidSqBase.h"
-#include "Cylinder.h"
-#include "Sphere.h"
-#include "Torus.h"
-#include "Plane.h"
+#include "shapes/Shape.h"
+#include "shapes/Cube.h"
+#include "shapes/PyramidSqBase.h"
+#include "shapes/Cylinder.h"
+#include "shapes/Sphere.h"
+#include "shapes/Torus.h"
+#include "shapes/Plane.h"
 
 // Factory pattern for creating primitive shapes
 class ShapeFactory

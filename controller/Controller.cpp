@@ -1,22 +1,5 @@
 #include "Controller.h"
 
-Controller::Controller(View* view) : cView(view) {}
-
-// Render shapes. Must call Controller::initialize and View::createShaderProgram first
-void Controller::run(int argc, char* argv[])
-{
-	// Looking into moving render loop here
-}
-
-void Controller::foundGlError(const char* line)
-{
-	GLenum error;
-	if ((error = glGetError()) != GL_NO_ERROR)
-	{
-		std::cout << line << " - OpenGL error: " << error << std::endl;
-	}
-}
-
 bool Controller::initialize(int argc, char* argv[])
 {
 	// GLFW: initialize and configure
@@ -131,7 +114,7 @@ void Controller::mousePositionCallback(GLFWwindow* window, double xpos, double y
 
 void Controller::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
-	cView->setCameraSpeed(yoffset);
+	cView->setCameraSpeed((GLfloat)yoffset);
 }
 
 void Controller::viewModeToggleWrapper(GLFWwindow* window, int key, int scancode, int action, int mods)

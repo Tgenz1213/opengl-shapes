@@ -1,5 +1,4 @@
 #include "View.h"
-#include "Controller.h"
 
 // Create shader
 bool View::createShaderProgram(const GLchar* const vertexShaderSource, const GLchar* const fragmentShaderSource)

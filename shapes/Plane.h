@@ -13,4 +13,3 @@ public:
 	void createTextureCoordinates() override;
 	void createIndices() override;
 };
-

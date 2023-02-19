@@ -28,4 +28,3 @@ private:
 	GLuint slices{};
 	GLuint stacks{};
 };
-

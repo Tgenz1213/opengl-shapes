@@ -1,7 +1,7 @@
 #pragma once
 
 #include "framework.h"
-#include "Shape.h"
+#include "shapes/Shape.h"
 
 /*Shader program Macro*/
 #ifndef GLSL
