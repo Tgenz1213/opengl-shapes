@@ -1,6 +1,7 @@
 #include "Cylinder.h"
 #include <cmath>
 
+// Constructor with arguments
 Cylinder::Cylinder(GLfloat baseRadius, GLfloat topRadius, GLfloat height, GLuint nSides, GLuint nStacks)
 {
 	setBaseRadius(baseRadius);
@@ -51,7 +52,7 @@ void Cylinder::createVertices() {
 	}
 }
 
-// Method to create normals
+// Generate normals. Top face and last stack are interfering with eachother. Not sure why.
 void Cylinder::createNormals() {
 	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides; // Calculate step angle
 	GLfloat unitHeight = height / (GLfloat)nStacks; // Calculate unit height
@@ -94,6 +95,7 @@ void Cylinder::createNormals() {
 	}
 }
 
+// Generate texture coordinates
 void Cylinder::createTextureCoordinates() {
 	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides;             // Calculate step angle
 	GLfloat unitHeight = height / (GLfloat)nStacks;                      // Calculate unit height
@@ -126,6 +128,7 @@ void Cylinder::createTextureCoordinates() {
 	}
 }
 
+// Generate indices
 void Cylinder::createIndices() {
 	auto nVertices = static_cast<GLuint>(vertices.size() / 3);
 	GLuint nSideVerts = nSides + 1;
