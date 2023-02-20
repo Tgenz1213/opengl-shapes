@@ -3,11 +3,6 @@
 #include "framework.h"
 #include "shapes/Shape.h"
 
-/*Shader program Macro*/
-#ifndef GLSL
-#define GLSL(Version, Source) "#version " #Version " core \n" #Source
-#endif
-
 // Manages what is displayed on the screen
 class View
 {

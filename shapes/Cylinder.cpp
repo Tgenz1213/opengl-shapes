@@ -14,12 +14,12 @@ Cylinder::Cylinder(GLfloat baseRadius, GLfloat topRadius, GLfloat height, GLuint
 
 // Method to create vertices
 void Cylinder::createVertices() {
-	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides;             // Calculate step angle
-	GLfloat unitHeight = height / (GLfloat)nStacks;                      // Calculate unit height
-	GLfloat unitRadius = (topRadius - baseRadius) / (GLfloat)nStacks;    // Calculate unit radius increment
+	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides;
+	GLfloat unitHeight = height / (GLfloat)nStacks;
+	GLfloat unitRadius = (topRadius - baseRadius) / (GLfloat)nStacks;
 
 	// Generate vertices for bottom face
-	for (GLuint i = 0; i < nSides; ++i) {
+	for (GLuint i = 0; i <= nSides; ++i) {
 		GLfloat x = baseRadius * cos((GLfloat)i * step);
 		GLfloat z = baseRadius * sin((GLfloat)i * step);
 		GLfloat y = -height / 2.0f;
@@ -29,7 +29,7 @@ void Cylinder::createVertices() {
 	}
 
 	// Generate vertices for sides
-	for (GLuint i = 0; i < nStacks; ++i) {
+	for (GLuint i = 0; i <= nStacks; ++i) {
 		GLfloat radius = baseRadius + (GLfloat)i * unitRadius;
 		GLfloat y = -height / 2.0f + (GLfloat)i * unitHeight;
 		for (GLuint j = 0; j < nSides; ++j) {
@@ -42,7 +42,7 @@ void Cylinder::createVertices() {
 	}
 
 	// Generate vertices for top face
-	for (GLuint i = 0; i < nSides; ++i) {
+	for (GLuint i = 0; i <= nSides; ++i) {
 		GLfloat x = topRadius * cos((GLfloat)i * step);
 		GLfloat z = topRadius * sin((GLfloat)i * step);
 		GLfloat y = height / 2.0f;
@@ -54,113 +54,108 @@ void Cylinder::createVertices() {
 
 // Generate normals. Top face and last stack are interfering with eachother. Not sure why.
 void Cylinder::createNormals() {
-	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides; // Calculate step angle
-	GLfloat unitHeight = height / (GLfloat)nStacks; // Calculate unit height
-	GLfloat unitRadius = (topRadius - baseRadius) / (GLfloat)nStacks; // Calculate unit radius increment
-
-	// Generate normals for bottom face
-	for (GLuint i = 0; i < nSides; ++i) {
-		GLfloat x = baseRadius * cos((GLfloat)i * step);
-		GLfloat z = baseRadius * sin((GLfloat)i * step);
-		GLfloat y = -height / 2.0f;
-		glm::vec3 dir = glm::normalize(glm::vec3(x, y, z));
-		normals.push_back(dir.x);
-		normals.push_back(dir.y);
-		normals.push_back(dir.z);
+	// Bottom face
+	for (GLuint i = 0; i <= nSides; ++i) {
+		// Add normal for bottom vertex
+		normals.push_back(0.0f);
+		normals.push_back(-1.0f);
+		normals.push_back(0.0f);
 	}
 
-	// Generate normals for sides
-	for (GLuint i = 0; i < nStacks; ++i) {
-		GLfloat radius = baseRadius + (GLfloat)i * unitRadius;
-		GLfloat y = -height / 2.0f + (GLfloat)i * unitHeight;
+	for (GLuint i = 0; i <= nStacks; ++i) {
 		for (GLuint j = 0; j < nSides; ++j) {
-			GLfloat x = radius * cos((GLfloat)j * step);
-			GLfloat z = radius * sin((GLfloat)j * step);
-			glm::vec3 dir = glm::normalize(glm::vec3(x, y, z));
-			normals.push_back(dir.x);
-			normals.push_back(dir.y);
-			normals.push_back(dir.z);
+			// Calculate the index of the current vertex in the vertices array
+			GLuint vertexIndex = i * nSides + j;
+			// Calculate the position of the current vertex
+			glm::vec3 pos(vertices[vertexIndex * 3], vertices[vertexIndex * 3 + 1], vertices[vertexIndex * 3 + 2]);
+			// Calculate the normal for the current vertex
+			glm::vec3 normal = glm::normalize(glm::vec3(pos.x, 0.0f, pos.z));
+			// Add the normal to the normals array
+			normals.push_back(normal.x);
+			normals.push_back(normal.y);
+			normals.push_back(normal.z);
 		}
 	}
 
-	// Generate normals for top face
-	GLfloat y = 1.0f;
-	for (GLuint i = 0; i < nSides; ++i) {
-		GLfloat nx = topRadius * cos((GLfloat)i * step);
-		GLfloat nz = topRadius * sin((GLfloat)i * step);
-		glm::vec3 dir = glm::normalize(glm::vec3(nx, y, nz));
-		normals.push_back(dir.x);
-		normals.push_back(dir.y);
-		normals.push_back(dir.z);
+	// Top face
+	for (GLuint i = 0; i <= nSides; ++i) {
+		// Add normal for top vertex
+		normals.push_back(0.0f);
+		normals.push_back(1.0f);
+		normals.push_back(0.0f);
 	}
 }
 
 // Generate texture coordinates
 void Cylinder::createTextureCoordinates() {
-	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides;             // Calculate step angle
-	GLfloat unitHeight = height / (GLfloat)nStacks;                      // Calculate unit height
+	GLfloat step = 2 * glm::pi<GLfloat>() / (GLfloat)nSides;	// Calculate step angle
+	GLfloat unitHeight = height / (GLfloat)nStacks;	// Calculate unit height
 
-	// Calculate texture coordinates for bottom face
-	GLfloat y = 0.0f;
-	for (GLuint i = 0; i < nSides; ++i) {
-		GLfloat x = 0.5f + 0.5f * cos((GLfloat)i * step);
-		GLfloat z = 0.5f - 0.5f * sin((GLfloat)i * step);
-		texCoords.push_back(x);
-		texCoords.push_back(z);
+	// Bottom face
+	for (GLuint i = 0; i <= nSides; ++i) {
+		// Add texture coordinates for bottom vertex
+		texCoords.push_back(0.5f + 0.5f * cos((GLfloat)i * step));
+		texCoords.push_back(0.5f + 0.5f * sin((GLfloat)i * step));
 	}
 
 	// Calculate texture coordinates for sides
-	for (GLuint i = 0; i < nStacks; ++i) {
-		y = (GLfloat)i * unitHeight / height;
+	for (GLuint i = 0; i <= nStacks; ++i) {
+		GLfloat y = (GLfloat)i / (GLfloat)nStacks;
 		for (GLuint j = 0; j < nSides; ++j) {
-			GLfloat x = (GLfloat)j / (GLfloat)nSides;
+			GLuint vertexIndex = i * nSides + j;
+			GLfloat x = atan2(vertices[vertexIndex * 3 + 2], vertices[vertexIndex * 3]) / (2 * glm::pi<GLfloat>());
 			texCoords.push_back(x);
 			texCoords.push_back(y);
 		}
 	}
 
-	// Calculate texture coordinates for top face
-	for (GLuint i = 0; i < nSides; ++i) {
-		GLfloat x = 0.5f + 0.5f * cos((GLfloat)i * step);
-		GLfloat z = 0.5f + 0.5f * sin((GLfloat)i * step);
-		texCoords.push_back(x);
-		texCoords.push_back(z);
+	// Top face
+	for (GLuint i = 0; i <= nSides; ++i) {
+		// Add texture coordinates for top vertex
+		texCoords.push_back(0.5f + 0.5f * cos((GLfloat)i * step));
+		texCoords.push_back(0.5f + 0.5f * sin((GLfloat)i * step));
 	}
 }
 
 // Generate indices
 void Cylinder::createIndices() {
-	auto nVertices = static_cast<GLuint>(vertices.size() / 3);
-	GLuint nSideVerts = nSides + 1;
-
 	// Generate indices for bottom face
-	for (GLuint i = 0; i < nSides; ++i) {
-		indices.push_back(i);
-		indices.push_back(i + 1);
-		indices.push_back(nSideVerts);
+	for (GLuint i = 0; i <= nSides; ++i) {
+		if (i < nSides)
+		{
+			indices.push_back(0);
+			indices.push_back(i + 1);
+			indices.push_back(i + 2);
+		}
+		else
+		{
+			indices.push_back(0);
+			indices.push_back(nSides);
+			indices.push_back(1);
+		}
 	}
 
+	// Something is going wrong between these two loops but I can't figure out what
+
 	// Generate indices for sides
-	for (GLuint i = 0; i <= nStacks; i++) {
-		for (GLuint j = 0; j < nSides; j++) {
-			GLuint p0 = i * nSides + j;
-			GLuint p1 = (i + 1) % nSides * nSides + j;
-			GLuint p2 = i * nSides + (j + 1) % nSides;
-			GLuint p3 = (i + 1) % nSides * nSides + (j + 1) % nSides;
+	for (GLuint i = 0; i <= nStacks; ++i) {
+		for (GLuint j = 0; j < nSides; ++j) {
+			GLuint k = (j + 1) % nSides;
 
-			indices.push_back(p0);
-			indices.push_back(p2);
-			indices.push_back(p1);
+			indices.push_back(i * nSides + j);
+			indices.push_back(i * nSides + k);
+			indices.push_back(i * nSides + j + nSides);
 
-			indices.push_back(p1);
-			indices.push_back(p2);
-			indices.push_back(p3);
+			indices.push_back(i * nSides + j + nSides);
+			indices.push_back(i * nSides + k);
+			indices.push_back(i * nSides + k + nSides);
 		}
 	}
 
 	// Generate indices for top face
-	GLuint topVertex = nVertices - nSideVerts;
-	for (GLuint i = 0; i < nSides; ++i) {
+	auto nVertices = static_cast<GLuint>(vertices.size() / 3);
+	GLuint topVertex = nVertices - nSides;
+	for (GLuint i = 0; i <= nSides; ++i) {
 		indices.push_back(topVertex + i);
 		indices.push_back(nVertices - 1);
 		indices.push_back(topVertex + i + 1);

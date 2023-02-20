@@ -18,7 +18,7 @@ void Sphere::createVertices()
 	GLfloat thetaStep = 2.0f * pi / (GLfloat)slices;
 	GLfloat phiStep = pi / (GLfloat)stacks;
 
-	for (unsigned int i = 0; i < stacks; i++) {
+	for (unsigned int i = 0; i <= stacks; i++) {
 		phi = (GLfloat)i * phiStep;
 		for (unsigned int j = 0; j <= slices; j++) {
 			theta = (GLfloat)j * thetaStep;
@@ -62,7 +62,7 @@ void Sphere::createTextureCoordinates()
 {
 	std::vector<GLfloat> texCoords;
 
-	for (unsigned int i = 0; i < stacks; i++) {
+	for (unsigned int i = 0; i <= stacks; i++) {
 		GLfloat v = 1.0f - (GLfloat)i / (GLfloat)stacks;
 		for (unsigned int j = 0; j <= slices; j++) {
 			GLfloat u = (GLfloat)j / (GLfloat)slices;
@@ -79,7 +79,7 @@ void Sphere::createIndices()
 {
 	std::vector<GLuint> indices;
 
-	for (unsigned int i = 0; i < stacks; i++) {
+	for (unsigned int i = 0; i <= stacks; i++) {
 		for (unsigned int j = 0; j <= slices; j++) {
 			GLuint p0 = i * (slices + 1) + j;
 			GLuint p1 = p0 + slices + 1;

@@ -92,7 +92,10 @@ int main(int argc, char* argv[])
 		UDrawFloor(mView, mFloor);
 
 		// Set view mode. Variable changed with P key press
-		mView.setViewModePerspective();
+		if (mView.isViewPerspective())
+			mView.setViewModePerspective();
+		else
+			mView.setViewModeOrthographic();
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Render lighting
@@ -139,7 +142,10 @@ int main(int argc, char* argv[])
 		mLightCubeFill.draw();
 		glBindVertexArray(0);
 
-		mView.setViewModePerspective();
+		if (mView.isViewPerspective())
+			mView.setViewModePerspective();
+		else
+			mView.setViewModeOrthographic();
 
 		// Swap buffers
 		glfwSwapBuffers(mView.getWindow());
@@ -258,7 +264,7 @@ bool UInitializeWhiskeyBottle(const View& view, const ShapeFactory& factory, Com
 	bottle.cap = factory.createCylinder(0.2f, 0.2f, 0.2f, 32, 3);
 	bottle.neck = factory.createCylinder(0.4f, 0.2f, 1.0f, 32, 4);
 	bottle.neckBase = factory.createSphere(0.999f, 16, 16);
-	bottle.body = factory.createCylinder(1.0f, 1.0f, 3.0f, 32, 4);
+	bottle.body = factory.createCylinder(1.0f, 1.0f, 3.0f, 32, 32);
 	bottle.bodyBase = factory.createTorus(0.9f, 0.1f, 32);
 
 	if (!ULoadTexture(view, bottle.textureFilenameIce, bottle.iceTexId))

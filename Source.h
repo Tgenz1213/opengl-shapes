@@ -60,7 +60,7 @@ namespace ComplexShape
 		GLuint tileTexId{};
 
 		// File location
-		const char* textureFilenameTile = "C:/Users/Tim/source/repos/cs330/resources/tile.jpg";
+		const char* textureFilenameTile = "resources/tile.jpg";
 	};
 }
 
