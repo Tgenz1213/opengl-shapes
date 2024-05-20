@@ -12,7 +12,7 @@ The Factory pattern is used to implement the Shape and ShapeFactory classes. The
 # How To Use This Code
 To see the final product I made, navigate to ".\x64\Debug" and run "5-1.exe."
 
-To build the project and modify the files, open the solution in Visual Studios. The necessary libraries and dependencies are already included in the project. You may have to install GLAD for your particular machine by checking your OpenGL version and then going to https://glad.dav1d.de/ to get the correct files and overwriting the directory in "cs330\includes\GLAD"
+To build the project and modify the files, open the solution in Visual Studios. The necessary libraries and dependencies are already included in the project. You may have to install GLAD for your particular machine by checking your OpenGL version and then going to https://glad.dav1d.de/ to get the correct files and overwriting the directory in ".\includes\GLAD"
 
 # Known issues
 Cylinder's side vertex coordinate indices are not created correctly, which results in odd looking sides. However, the shape is there and it reflects light like the other shapes.
