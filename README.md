@@ -1,4 +1,4 @@
-# cs330
+# OpenGL Shapes
 OpenGL project to create complex shapes with primitive shapes
 
 # About
